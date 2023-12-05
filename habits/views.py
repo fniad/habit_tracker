@@ -21,9 +21,8 @@ class HabitRetrieveAPIView(generics.RetrieveAPIView):
 class HabitCreateAPIView(generics.CreateAPIView):
     """ Создание урока """
     serializer_class = HabitSerializer
-
-    # def perform_create(self, serializer):
-    #     serializer.save(user=self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class HabitUpdateAPIView(generics.UpdateAPIView):

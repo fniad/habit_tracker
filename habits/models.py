@@ -14,6 +14,7 @@ class Habit(models.Model):
     )
     place = models.CharField(max_length=255, blank=True, verbose_name='Место')
     time = models.TimeField(verbose_name='Время')
+    duration = models.DurationField(**NULLABLE, verbose_name='Длительность выполнения')
     action = models.TextField(verbose_name='Действие')
     related_habit = models.ForeignKey(
         'self',
