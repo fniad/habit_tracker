@@ -13,5 +13,5 @@ urlpatterns = ([
                   path('habit/create/', HabitCreateAPIView.as_view(), name='create-habit'),
                   path('habit/update/<int:pk>/', HabitUpdateAPIView.as_view(), name='update-habit'),
                   path('habit/delete/<int:pk>/', HabitDestroyAPIView.as_view(), name='delete-habit'),
-
+                  path('habit/public/', ListPublicHabits.as_view(), name='list-public-habits'),
               ])
