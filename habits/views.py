@@ -44,6 +44,7 @@ class HabitDestroyAPIView(generics.DestroyAPIView):
 
 
 class ListPublicHabits(generics.ListAPIView):
+    """ Список публичных привычек """
     serializer_class = HabitSerializer
     pagination_class = HabitPagination
 
