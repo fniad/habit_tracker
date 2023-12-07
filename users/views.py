@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
 from users.models import User
 from users.pagination import UserPagination
-from users.permissions import IsOwnerOrReadOnly
+from users.permissions import IsOwnerOrReadOnly, IsOwnerOrStaff, IsOwner
 from users.serializers import UserSerializer, UserPublicProfileSerializer, UserCreateSerializer, UserProfileSerializer
 
 
@@ -40,11 +40,11 @@ class UserUpdateAPIView(generics.UpdateAPIView):
     """ Обновление пользователя """
     queryset = User.objects.all().order_by('pk')
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly | IsAdminUser]
+    permission_classes = [IsAuthenticated, IsOwner]
 
 
 class UserDestroyAPIView(generics.DestroyAPIView):
     """ Удаление пользователя """
     queryset = User.objects.all().order_by('pk')
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly | IsAdminUser]
+    permission_classes = [IsAuthenticated, IsOwnerOrStaff]
