@@ -14,3 +14,26 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         if request.user.id == view.get_object().id:
             return True
         return False
+
+
+class IsOwner(permissions.BasePermission):
+    """ Права доступа для владельцев """
+
+    message = "У Вас не достаточно прав для доступа!"
+
+    def has_permission(self, request, view):
+        if request.user.id == view.get_object().id:
+            return True
+        return False
+
+class IsOwnerOrStaff(permissions.BasePermission):
+    """ Права доступа для владельцев или для суперпользователя"""
+
+    message = "У Вас не достаточно прав для доступа!"
+
+    def has_permission(self, request, view):
+        if request.user.is_staff:
+            return True
+        if request.user.id == view.get_object().id:
+            return True
+        return False
