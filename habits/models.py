@@ -36,9 +36,13 @@ class Habit(models.Model):
         """ Текст привычки """
         text = f'Задача: {self.action} в {self.time}.'
         if self.place:
-            text += f' Место: {self.place}.'
+            text += f'Место: {self.place}.'
         if self.reward:
-            text += f' Вознаграждение: {self.reward}.'
+            text += f'Вознаграждение: {self.reward}.'
+        if self.related_habit:
+            text += (f'Связанная привычка: {self.related_habit.action}, '
+                     f'время: {self.related_habit.time}, '
+                     f'место: {self.related_habit.place}.')
         return text
 
     class Meta:
