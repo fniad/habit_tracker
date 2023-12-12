@@ -14,10 +14,7 @@ def calculate_next_send_date(last_updated, periodicity, time):
 
 def check_if_message_should_be_sent(current_date, next_send_date):
     """ Функция для проверки, нужно ли отправлять сообщение на сегодняшнюю дату """
-    if current_date >= next_send_date:
-        return True
-    else:
-        return False
+    return current_date >= next_send_date
 
 
 def update_last_updated(current_date, pk):
@@ -35,4 +32,5 @@ def send_message_tg(chat_id, text):
         "text": text
     }
     response = requests.get(url, params=params)
+    response.raise_for_status()
     return response.json()
