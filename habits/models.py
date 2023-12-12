@@ -1,7 +1,9 @@
 """ Модели приложения habits """
 from django.conf import settings
 from django.db import models
-
+from django.core.validators import MaxValueValidator
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 from users.models import NULLABLE
 
 
@@ -14,7 +16,8 @@ class Habit(models.Model):
     )
     place = models.CharField(max_length=255, blank=True, verbose_name='Место')
     time = models.TimeField(verbose_name='Время')
-    duration = models.DurationField(**NULLABLE, verbose_name='Длительность выполнения')
+    duration = models.DurationField(validators=[MaxValueValidator(limit_value=timezone.timedelta(minutes=2))],
+                                    **NULLABLE, verbose_name='Длительность выполнения')
     action = models.TextField(verbose_name='Действие')
     related_habit = models.ForeignKey(
         'self',
@@ -44,6 +47,10 @@ class Habit(models.Model):
                      f'время: {self.related_habit.time}, '
                      f'место: {self.related_habit.place}.')
         return text
+
+    def clean(self):
+        if self.related_habit and not self.related_habit.is_pleasant:
+            raise ValidationError('Связанная привычка должна быть приятной')
 
     class Meta:
         """ Мета-данные """
