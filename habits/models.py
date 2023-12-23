@@ -50,14 +50,16 @@ class Habit(models.Model):
         if self.related_habit and not self.related_habit.is_pleasant:
             raise ValidationError('Связанная привычка должна быть приятной')
 
+    def clean(self):
+        super().clean()
+        if self.duration and self.duration > timezone.timedelta(minutes=2):
+            raise ValidationError('Время на выполнение больше 2 минут.')
+
     class Meta:
         """ Мета-данные """
         verbose_name = 'привычка'
         verbose_name_plural = 'привычки'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['duration'],
-                name='unique_duration_constraint',
-                condition=models.Q(duration__lte=timezone.timedelta(minutes=2)),
-            )
-        ]
+        models.CheckConstraint(
+            check=models.Q(duration__lte=timezone.timedelta(minutes=2)),
+            name='duration_max_constraint'
+        )
