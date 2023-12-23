@@ -1,7 +1,6 @@
 """ Модели приложения habits """
 from django.conf import settings
 from django.db import models
-from django.core.validators import MaxValueValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from users.models import NULLABLE
@@ -16,8 +15,7 @@ class Habit(models.Model):
     )
     place = models.CharField(max_length=255, blank=True, verbose_name='Место')
     time = models.TimeField(verbose_name='Время')
-    duration = models.DurationField(validators=[MaxValueValidator(limit_value=timezone.timedelta(minutes=2))],
-                                    **NULLABLE, verbose_name='Длительность выполнения')
+    duration = models.DurationField(**NULLABLE, verbose_name='Длительность выполнения')
     action = models.TextField(verbose_name='Действие')
     related_habit = models.ForeignKey(
         'self',
@@ -31,7 +29,7 @@ class Habit(models.Model):
     periodicity = models.SmallIntegerField(default=1, verbose_name='Периодичность выполнения в днях')
     last_updated = models.DateField(auto_now_add=True, verbose_name='Дата и время последнего обновления')
 
-    def __str__(self):
+    def str(self):
         return f'Действие: {self.action}, время: {self.time}, периодичность: {self.periodicity}'
 
     @property
@@ -56,3 +54,10 @@ class Habit(models.Model):
         """ Мета-данные """
         verbose_name = 'привычка'
         verbose_name_plural = 'привычки'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['duration'],
+                name='unique_duration_constraint',
+                condition=models.Q(duration__lte=timezone.timedelta(minutes=2)),
+            )
+        ]
