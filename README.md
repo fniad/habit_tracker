@@ -13,47 +13,17 @@
 1. ```git clone https://github.com/fniad/habit_tracker.git```
 2. ```cd habit_tracker```
 
-### Шаг 2. Установка зависимостей
+### Шаг 2. Настройка окружения
 
-1. ``` poetry install```
-2. ```poetry shell```
+1. ```touch .env.docker``` 
+2. ```nano .env.docker``` и заполнить по шаблону из .env.docker.test
 
-### Шаг 3. Установка и настройка Redis
+### Шаг 3. На Ubuntu или Linux сначала остановить postgresql
 
-1. ```sudo apt-get install redis-server```
-2. ```sudo service redis-server start```
-3. ```redis-cli ping``` (в ответ должно прийти **'PONG'**)
+```systemctl stop postgresql```
 
-### Шаг 4. Установка и настройка PostgreSQL
+### Шаг 4. Запуск docker-compose
 
-1. ```sudo apt-get install postgresql```
-2. ```sudo -u postgres psql```
-3. ```CREATE DATABASE habit_tracker_db;```
-4. ```\q```
-
-### Шаг 5. Настройка окружения
-
-1. ```touch .env```
-2. ```nano .env``` и заполнить по шаблону из **.env.test**
-
-### Шаг 6. Применение миграций
-
-1. ```python3 manage.py migrate```
-
-### Шаг 7. Загрузка данных с помощью команд 
-
-1. ```python3 manage.py fill_db```
-
-### Шаг 8. Создание суперпользователя
-
-```python3 manage.py createsuperuser```
-
-### Шаг 9. Запуск сервера
-1. ```python3 manage.py runserver```
-
-# Для запуска DOCKER:
-
-1.  На Ubuntu или Linux сначала остановить postgresql ```systemctl stop postgresql```
-2. ```docker-compose build```
-3. ```docker-compose exec app python manage.py migrate``` в соседнем терминале
-4. ```docker-compose up```
+1. ```docker-compose build```
+2. ```docker-compose exec app python manage.py migrate``` в соседнем терминале
+3. ```docker-compose up```
