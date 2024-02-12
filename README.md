@@ -50,3 +50,10 @@
 
 ### Шаг 9. Запуск сервера
 1. ```python3 manage.py runserver```
+
+# Для запуска DOCKER:
+
+1.  На Ubuntu или Linux сначала остановить postgresql ```systemctl stop postgresql```
+2. ```docker-compose build```
+3. ```docker-compose exec app python manage.py migrate``` в соседнем терминале
+4. ```docker-compose up```
